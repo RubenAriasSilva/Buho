@@ -3,9 +3,13 @@
 [ext_resource type="Script" uid="uid://blbwirnoft7j2" path="res://scripts/tablero.gd" id="1_tablero"]
 [ext_resource type="PackedScene" path="res://escenas/personaje.tscn" id="2_personaje"]
 [ext_resource type="PackedScene" path="res://escenas/hud.tscn" id="3_hud"]
-[ext_resource type="Script" uid="uid://du0s5lcglmy24" path="res://scripts/gestor_partida.gd" id="4_gestor"]
-[ext_resource type="Script" path="res://scripts/ia_npc.gd" id="5_ia"]
-[ext_resource type="Resource" path="res://cartas/mazo_base.tres" id="6_mazo"]
+[ext_resource type="Script" path="res://scripts/combate.gd" id="4_combate"]
+[ext_resource type="Script" path="res://scripts/ia_tiempo_real.gd" id="5_ia"]
+[ext_resource type="Script" path="res://scripts/control_jugador.gd" id="6_control"]
+[ext_resource type="Resource" path="res://golpes/manotazo.tres" id="7_manotazo"]
+[ext_resource type="Resource" path="res://golpes/punetazo.tres" id="8_punetazo"]
+[ext_resource type="Resource" path="res://golpes/patada.tres" id="9_patada"]
+[ext_resource type="Script" path="res://scripts/golpe.gd" id="10_golpe"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fcegr"]
 resource_name = "rojoObscuro"
@@ -544,14 +548,22 @@ celda_inicial = Vector2i(3, 1)
 
 [node name="HUD" parent="." unique_id=1205266170 instance=ExtResource("3_hud")]
 
-[node name="IaNpc" type="Node" parent="." unique_id=410416086]
-script = ExtResource("5_ia")
+[node name="ControlJugador" type="Node" parent="." node_paths=PackedStringArray("personaje", "hud", "combate")]
+script = ExtResource("6_control")
+personaje = NodePath("../Jugador")
+hud = NodePath("../HUD")
+combate = NodePath("../Combate")
 
-[node name="GestorPartida" type="Node" parent="." unique_id=1432816418 node_paths=PackedStringArray("tablero", "jugador", "npc", "hud", "ia")]
-script = ExtResource("4_gestor")
+[node name="IaTiempoReal" type="Node" parent="." node_paths=PackedStringArray("npc", "jugador", "combate")]
+script = ExtResource("5_ia")
+npc = NodePath("../Npc")
+jugador = NodePath("../Jugador")
+combate = NodePath("../Combate")
+
+[node name="Combate" type="Node" parent="." node_paths=PackedStringArray("tablero", "jugador", "npc", "hud")]
+script = ExtResource("4_combate")
 tablero = NodePath("../Tablero")
 jugador = NodePath("../Jugador")
 npc = NodePath("../Npc")
 hud = NodePath("../HUD")
-ia = NodePath("../IaNpc")
-mazo = ExtResource("6_mazo")
+golpes = Array[ExtResource("10_golpe")]([ExtResource("7_manotazo"), ExtResource("8_punetazo"), ExtResource("9_patada")])

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/golpe.gd" id="1_golpe"]
+
+[resource]
+script = ExtResource("1_golpe")
+nombre = "Puñetazo"
+costo = 3
+impacto = 18.0
+alcance = 1.1
+recarga = 0.55
+color = Color(0.95, 0.5, 0.3, 1)

@@ -15,6 +15,9 @@ signal casilla_presionada(celda: Vector2i, tipo: Tipo)
 @export var centro := Vector3(0.3116, 0.9127, 0.1796)
 ## Agrega una fila/columna alrededor para cuerdas (lados) y postes (esquinas).
 @export var capa_exterior := true
+## Detecta toques sobre las casillas (emite `casilla_presionada`). Apagado en
+## el modo de tiempo real, donde se usa el joystick.
+@export var entrada_toque := false
 
 @export_group("Cuerdas y postes")
 ## Distancia del centro a las cuerdas (donde rebota el personaje).
@@ -35,6 +38,8 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not entrada_toque:
+		return
 	# En móvil el toque llega emulado como clic (emulate_mouse_from_touch),
 	# así que con escuchar el ratón cubrimos PC y celular sin duplicar eventos.
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

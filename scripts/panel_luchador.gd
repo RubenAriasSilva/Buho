@@ -38,7 +38,7 @@ func configurar(personaje: Personaje) -> void:
 	_linea_turno.color = personaje.color
 	personaje.energia_cambiada.connect(_on_energia_cambiada)
 	personaje.impacto_cambiado.connect(_on_impacto_cambiado)
-	_on_energia_cambiada(personaje.energia, personaje.energia_max)
+	_on_energia_cambiada(personaje.energia_entera(), personaje.energia_max)
 	_on_impacto_cambiado(personaje.impacto)
 
 

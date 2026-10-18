@@ -1,30 +1,10 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
 [ext_resource type="Theme" path="res://ui/tema.tres" id="2_tema"]
 [ext_resource type="PackedScene" path="res://escenas/panel_luchador.tscn" id="3_panel"]
-[ext_resource type="Script" path="res://scripts/barra_cartas.gd" id="4_barra"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boton"]
-bg_color = Color(1, 1, 1, 0.1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boton_presionado"]
-bg_color = Color(1, 1, 1, 0.25)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boton_deshabilitado"]
-bg_color = Color(1, 1, 1, 0.04)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[ext_resource type="Script" path="res://scripts/joystick.gd" id="4_joystick"]
+[ext_resource type="Script" path="res://scripts/boton_accion.gd" id="5_boton"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -82,22 +62,7 @@ text = "00:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Turno" type="Label" parent="Raiz"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -90.0
-offset_top = 62.0
-offset_right = 90.0
-offset_bottom = 86.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 16
-text = "Tu turno"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Ayuda" type="Label" parent="Raiz"]
+[node name="Mensaje" type="Label" parent="Raiz"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -105,23 +70,7 @@ anchor_right = 0.5
 offset_left = -320.0
 offset_top = 150.0
 offset_right = 320.0
-offset_bottom = 180.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.75)
-theme_override_font_sizes/font_size = 17
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Mensaje" type="Label" parent="Raiz"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -320.0
-offset_top = 186.0
-offset_right = 320.0
-offset_bottom = 220.0
+offset_bottom = 184.0
 grow_horizontal = 2
 theme_type_variation = &"Titulo"
 theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
@@ -129,41 +78,70 @@ theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Terminar" type="Button" parent="Raiz"]
+[node name="Joystick" type="Control" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -290.0
+offset_right = 260.0
+offset_bottom = -70.0
+grow_vertical = 0
+script = ExtResource("4_joystick")
+
+[node name="Botones" type="Control" parent="Raiz"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -176.0
-offset_top = -310.0
-offset_right = -30.0
-offset_bottom = -262.0
+offset_left = -340.0
+offset_top = -330.0
+offset_right = -20.0
+offset_bottom = -40.0
 grow_horizontal = 0
 grow_vertical = 0
-focus_mode = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.9)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.3)
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxFlat_boton")
-theme_override_styles/hover = SubResource("StyleBoxFlat_boton")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_boton_presionado")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_boton_deshabilitado")
-text = "Terminar turno"
+mouse_filter = 2
 
-[node name="BarraCartas" type="HBoxContainer" parent="Raiz"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Manotazo" type="Control" parent="Raiz/Botones"]
+layout_mode = 0
 offset_left = 30.0
-offset_top = -246.0
-offset_right = -30.0
-offset_bottom = -30.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 1
-script = ExtResource("4_barra")
+offset_top = 170.0
+offset_right = 134.0
+offset_bottom = 274.0
+script = ExtResource("5_boton")
+texto = "Manotazo"
+
+[node name="Punetazo" type="Control" parent="Raiz/Botones"]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 120.0
+offset_right = 266.0
+offset_bottom = 240.0
+script = ExtResource("5_boton")
+texto = "Puñetazo"
+radio = 60.0
+tam_fuente = 18
+
+[node name="Patada" type="Control" parent="Raiz/Botones"]
+layout_mode = 0
+offset_left = 196.0
+offset_top = 0.0
+offset_right = 300.0
+offset_bottom = 104.0
+script = ExtResource("5_boton")
+texto = "Patada"
+
+[node name="Cubrirse" type="Control" parent="Raiz/Botones"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 40.0
+offset_right = 160.0
+offset_bottom = 136.0
+script = ExtResource("5_boton")
+texto = "Cubrirse"
+color = Color(0.45, 0.72, 1, 1)
+radio = 48.0
+tam_fuente = 15

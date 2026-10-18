@@ -1,17 +1,18 @@
 extends CanvasLayer
-## HUD de la partida: paneles del NPC (izquierda) y del jugador (derecha),
-## cronómetro y turno (centro), barra de cartas y botón «Terminar» (abajo)
-## y etiquetas de coordenadas del tablero.
+## HUD del combate en tiempo real: paneles del NPC (izquierda) y del jugador
+## (derecha), cronómetro (centro), joystick (abajo a la izquierda), botones de
+## golpes y cubrirse (abajo a la derecha) y etiquetas de coordenadas del ring.
 
 const Tablero = preload("res://scripts/tablero.gd")
 const Personaje = preload("res://scripts/personaje.gd")
+const Golpe = preload("res://scripts/golpe.gd")
 
 enum LadoLetras { FRENTE, ATRAS }
 enum LadoNumeros { IZQUIERDA, DERECHA }
 
-signal terminar_presionado
-signal carta_armada(indice_mano: int)
-signal carta_devuelta(indice_mano: int)
+## Índice del golpe (0..2) presionado en los botones.
+signal golpe_presionado(indice: int)
+signal cubrirse_cambiado(activo: bool)
 
 @export_group("Coordenadas")
 @export var mostrar_coordenadas := true
@@ -31,82 +32,56 @@ signal carta_devuelta(indice_mano: int)
 
 var _tablero: Tablero
 var _jugador: Personaje
-var _npc: Personaje
+var _golpes: Array[Golpe] = []
 var _etiquetas_letras: Array[Label] = []
 var _etiquetas_numeros: Array[Label] = []
-var _estilo_boton: StyleBox
-var _estilo_boton_presionado: StyleBox
 
 @onready var _coordenadas: Control = $Raiz/Coordenadas
 @onready var _tiempo: Label = $Raiz/Tiempo
-@onready var _turno: Label = $Raiz/Turno
-@onready var _ayuda: Label = $Raiz/Ayuda
 @onready var _mensaje: Label = $Raiz/Mensaje
 @onready var _panel_jugador = $Raiz/PanelJugador
 @onready var _panel_npc = $Raiz/PanelNpc
-@onready var _barra_cartas = $Raiz/BarraCartas
-@onready var _boton_terminar: Button = $Raiz/Terminar
+@onready var _joystick = $Raiz/Joystick
+@onready var _botones_golpe: Array = [$Raiz/Botones/Manotazo, $Raiz/Botones/Punetazo, $Raiz/Botones/Patada]
+@onready var _boton_cubrirse = $Raiz/Botones/Cubrirse
 
 
 func _ready() -> void:
 	_mensaje.modulate.a = 0.0
-	_ayuda.text = ""
-	_estilo_boton = _boton_terminar.get_theme_stylebox("normal")
-	_estilo_boton_presionado = _boton_terminar.get_theme_stylebox("pressed")
-	_boton_terminar.pressed.connect(terminar_presionado.emit)
-	_barra_cartas.carta_armada.connect(carta_armada.emit)
-	_barra_cartas.carta_devuelta.connect(carta_devuelta.emit)
+	for i in _botones_golpe.size():
+		_botones_golpe[i].presionado.connect(golpe_presionado.emit.bind(i))
+	_boton_cubrirse.presionado.connect(cubrirse_cambiado.emit.bind(true))
+	_boton_cubrirse.soltado.connect(cubrirse_cambiado.emit.bind(false))
 
 
-func configurar(jugador: Personaje, npc: Personaje, tablero: Tablero) -> void:
+func configurar(jugador: Personaje, npc: Personaje, tablero: Tablero, golpes: Array[Golpe]) -> void:
 	_tablero = tablero
 	_jugador = jugador
-	_npc = npc
+	_golpes = golpes
 	_panel_jugador.configurar(jugador)
 	_panel_npc.configurar(npc)
-	_barra_cartas.configurar(jugador)
+	_panel_jugador.set_activo(true)
+	_panel_npc.set_activo(true)
+	for i in mini(golpes.size(), _botones_golpe.size()):
+		_botones_golpe[i].texto = golpes[i].nombre
+		_botones_golpe[i].subtitulo = "Energía %d" % golpes[i].costo
+		_botones_golpe[i].color = golpes[i].color
+	_boton_cubrirse.subtitulo = "%d/s" % roundi(jugador.costo_cubrirse_por_segundo)
 	_crear_coordenadas()
+
+
+## Dirección del joystick (arriba = y negativo); ZERO si no se toca.
+func vector_joystick() -> Vector2:
+	return _joystick.vector
+
+
+func cubrirse_presionado() -> bool:
+	return _boton_cubrirse.pulsado
 
 
 func mostrar_tiempo(segundos: float) -> void:
 	var s := floori(segundos)
 	_tiempo.text = "%02d:%02d" % [s / 60, s % 60]
-
-
-func mostrar_turno(es_jugador: bool) -> void:
-	_turno.text = "Tu turno" if es_jugador else "Turno rival"
-	_turno.add_theme_color_override("font_color", (_jugador if es_jugador else _npc).color)
-	_panel_jugador.set_activo(es_jugador)
-	_panel_npc.set_activo(not es_jugador)
-	_boton_terminar.disabled = not es_jugador
-	_barra_cartas.set_habilitada(es_jugador)
-
-
-## Destaca el botón como «Usar carta» cuando la carta armada puede activarse
-## sin moverse (al terminar el turno).
-func set_carta_lista(lista: bool) -> void:
-	_boton_terminar.text = "Usar carta" if lista else "Terminar turno"
-	if lista:
-		var estilo := StyleBoxFlat.new()
-		estilo.bg_color = Color(1, 0.8, 0.3)
-		estilo.set_corner_radius_all(10)
-		for estado in ["normal", "hover", "pressed"]:
-			_boton_terminar.add_theme_stylebox_override(estado, estilo)
-		_boton_terminar.add_theme_color_override("font_color", Color(0.08, 0.08, 0.1))
-		_boton_terminar.add_theme_color_override("font_hover_color", Color(0.08, 0.08, 0.1))
-		_boton_terminar.add_theme_color_override("font_pressed_color", Color(0.08, 0.08, 0.1))
-	else:
-		_boton_terminar.remove_theme_color_override("font_hover_color")
-		_boton_terminar.remove_theme_color_override("font_pressed_color")
-		_boton_terminar.add_theme_stylebox_override("normal", _estilo_boton)
-		_boton_terminar.add_theme_stylebox_override("hover", _estilo_boton)
-		_boton_terminar.add_theme_stylebox_override("pressed", _estilo_boton_presionado)
-		_boton_terminar.add_theme_color_override("font_color", Color(1, 1, 1, 0.9))
-
-
-## Texto persistente bajo el turno (p. ej. instrucciones al correr las cuerdas).
-func mostrar_ayuda(texto: String) -> void:
-	_ayuda.text = texto
 
 
 func mostrar_mensaje(texto: String) -> void:
@@ -120,6 +95,12 @@ func mostrar_mensaje(texto: String) -> void:
 func _process(_delta: float) -> void:
 	if _tablero == null:
 		return
+	var recarga: float = _jugador.fraccion_recarga()
+	for i in mini(_golpes.size(), _botones_golpe.size()):
+		_botones_golpe[i].disponible = _jugador.energia >= _golpes[i].costo
+		_botones_golpe[i].recarga = recarga
+	_boton_cubrirse.disponible = _jugador.energia > 0.0
+
 	_coordenadas.visible = mostrar_coordenadas
 	if not mostrar_coordenadas:
 		return
