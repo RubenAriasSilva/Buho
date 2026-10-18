@@ -1,0 +1,28 @@
+[gd_resource type="Theme" load_steps=4 format=3]
+
+[ext_resource type="FontFile" path="res://fuentes/Rubik.ttf" id="1_fuente"]
+
+[sub_resource type="FontVariation" id="FontVariation_texto"]
+base_font = ExtResource("1_fuente")
+variation_opentype = {
+2003265652: 500
+}
+
+[sub_resource type="FontVariation" id="FontVariation_negrita"]
+base_font = ExtResource("1_fuente")
+variation_opentype = {
+2003265652: 700
+}
+
+[resource]
+default_font = SubResource("FontVariation_texto")
+default_font_size = 20
+Button/fonts/font = SubResource("FontVariation_negrita")
+Label/colors/font_color = Color(0.95, 0.95, 0.97, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 0.55)
+Label/constants/outline_size = 3
+Titulo/base_type = &"Label"
+Titulo/fonts/font = SubResource("FontVariation_negrita")
+Tenue/base_type = &"Label"
+Tenue/colors/font_color = Color(1, 1, 1, 0.55)
+Tenue/font_sizes/font_size = 14

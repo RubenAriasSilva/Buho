@@ -1,5 +1,12 @@
 [gd_scene format=4 uid="uid://bjhc4mbyf2wxe"]
 
+[ext_resource type="Script" uid="uid://blbwirnoft7j2" path="res://scripts/tablero.gd" id="1_tablero"]
+[ext_resource type="PackedScene" path="res://escenas/personaje.tscn" id="2_personaje"]
+[ext_resource type="PackedScene" path="res://escenas/hud.tscn" id="3_hud"]
+[ext_resource type="Script" uid="uid://du0s5lcglmy24" path="res://scripts/gestor_partida.gd" id="4_gestor"]
+[ext_resource type="Script" path="res://scripts/ia_npc.gd" id="5_ia"]
+[ext_resource type="Resource" path="res://cartas/mazo_base.tres" id="6_mazo"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fcegr"]
 resource_name = "rojoObscuro"
 cull_mode = 2
@@ -447,7 +454,7 @@ emission_energy_multiplier = 16.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31159973, 0, 0.17957115)
 
 [node name="cuadriatero" type="MeshInstance3D" parent="Ring" unique_id=226261802]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.91267157, 0)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0.014165401, 0.91267157, 0)
 mesh = SubResource("ArrayMesh_b3vee")
 surface_material_override/0 = SubResource("StandardMaterial3D_wfwkq")
 surface_material_override/1 = SubResource("StandardMaterial3D_rrtif")
@@ -524,3 +531,27 @@ directional_shadow_mode = 0
 transform = Transform3D(0.9812421, -0.09201848, 0.16940075, 0.004934343, 0.89042753, 0.4550984, -0.19271655, -0.44572577, 0.874179, 1.9067028, 5.6352043, 8.536772)
 projection = 1
 size = 17.0
+
+[node name="Tablero" type="Node3D" parent="." unique_id=1083082991]
+script = ExtResource("1_tablero")
+
+[node name="Jugador" parent="." unique_id=830503590 instance=ExtResource("2_personaje")]
+
+[node name="Npc" parent="." unique_id=1613958334 instance=ExtResource("2_personaje")]
+nombre = "Rival"
+color = Color(0.6, 0.35, 0.95, 1)
+celda_inicial = Vector2i(3, 1)
+
+[node name="HUD" parent="." unique_id=1205266170 instance=ExtResource("3_hud")]
+
+[node name="IaNpc" type="Node" parent="." unique_id=410416086]
+script = ExtResource("5_ia")
+
+[node name="GestorPartida" type="Node" parent="." unique_id=1432816418 node_paths=PackedStringArray("tablero", "jugador", "npc", "hud", "ia")]
+script = ExtResource("4_gestor")
+tablero = NodePath("../Tablero")
+jugador = NodePath("../Jugador")
+npc = NodePath("../Npc")
+hud = NodePath("../HUD")
+ia = NodePath("../IaNpc")
+mazo = ExtResource("6_mazo")

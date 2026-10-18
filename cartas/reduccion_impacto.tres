@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/carta.gd" id="1_carta"]
+
+[resource]
+script = ExtResource("1_carta")
+nombre = "Reducción"
+categoria = 1
+descripcion = "Reduce tu Medidor de Impacto 25%."
+costo = 3
+reduce_impacto = 25.0

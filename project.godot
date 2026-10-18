@@ -15,10 +15,17 @@ run/main_scene="uid://bjhc4mbyf2wxe"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+AjusteVentana="*res://scripts/ajuste_ventana.gd"
+
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
+window/size/window_width_override=432
+window/size/window_height_override=768
+window/stretch/mode="canvas_items"
 window/handheld/orientation=1
 
 [dotnet]

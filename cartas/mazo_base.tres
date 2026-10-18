@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/mazo.gd" id="1_mazo"]
+[ext_resource type="Script" path="res://scripts/carta.gd" id="2_carta"]
+[ext_resource type="Resource" path="res://cartas/cachetada.tres" id="c0"]
+[ext_resource type="Resource" path="res://cartas/manotazo.tres" id="c1"]
+[ext_resource type="Resource" path="res://cartas/punetazo.tres" id="c2"]
+[ext_resource type="Resource" path="res://cartas/patada.tres" id="c3"]
+[ext_resource type="Resource" path="res://cartas/recuperacion_energia.tres" id="c4"]
+[ext_resource type="Resource" path="res://cartas/reduccion_impacto.tres" id="c5"]
+[ext_resource type="Resource" path="res://cartas/patada_doble.tres" id="c6"]
+[ext_resource type="Resource" path="res://cartas/plancha.tres" id="c7"]
+[ext_resource type="Resource" path="res://cartas/bloqueo.tres" id="c8"]
+
+[resource]
+script = ExtResource("1_mazo")
+cartas = Array[ExtResource("2_carta")]([ExtResource("c0"), ExtResource("c1"), ExtResource("c2"), ExtResource("c3"), ExtResource("c4"), ExtResource("c5"), ExtResource("c6"), ExtResource("c7"), ExtResource("c8")])

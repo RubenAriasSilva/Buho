@@ -1,0 +1,169 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+[ext_resource type="Theme" path="res://ui/tema.tres" id="2_tema"]
+[ext_resource type="PackedScene" path="res://escenas/panel_luchador.tscn" id="3_panel"]
+[ext_resource type="Script" path="res://scripts/barra_cartas.gd" id="4_barra"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boton"]
+bg_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boton_presionado"]
+bg_color = Color(1, 1, 1, 0.25)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boton_deshabilitado"]
+bg_color = Color(1, 1, 1, 0.04)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Raiz" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_tema")
+
+[node name="Coordenadas" type="Control" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PanelNpc" parent="Raiz" instance=ExtResource("3_panel")]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 236.0
+offset_bottom = 126.0
+
+[node name="PanelJugador" parent="Raiz" instance=ExtResource("3_panel")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -236.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 126.0
+grow_horizontal = 0
+
+[node name="Tiempo" type="Label" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 22.0
+offset_right = 90.0
+offset_bottom = 62.0
+grow_horizontal = 2
+theme_type_variation = &"Titulo"
+theme_override_font_sizes/font_size = 32
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Turno" type="Label" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 62.0
+offset_right = 90.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 16
+text = "Tu turno"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Ayuda" type="Label" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 150.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
+theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Mensaje" type="Label" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 186.0
+offset_right = 320.0
+offset_bottom = 220.0
+grow_horizontal = 2
+theme_type_variation = &"Titulo"
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Terminar" type="Button" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -176.0
+offset_top = -310.0
+offset_right = -30.0
+offset_bottom = -262.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.3)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_boton")
+theme_override_styles/hover = SubResource("StyleBoxFlat_boton")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_boton_presionado")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_boton_deshabilitado")
+text = "Terminar turno"
+
+[node name="BarraCartas" type="HBoxContainer" parent="Raiz"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -246.0
+offset_right = -30.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+alignment = 1
+script = ExtResource("4_barra")

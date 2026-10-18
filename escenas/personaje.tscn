@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/personaje.gd" id="1_pers"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cuerpo"]
+top_radius = 0.28
+bottom_radius = 0.28
+height = 1.2
+
+[node name="Personaje" type="Node3D"]
+script = ExtResource("1_pers")
+
+[node name="Cuerpo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("CylinderMesh_cuerpo")
